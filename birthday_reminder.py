@@ -8,29 +8,26 @@ DAY_DICT = {'Monday': [],
             'Friday': []}
 
 
+def weekday_checker(name, date):
+    weekday = date.strftime("%A")
+    if weekday in ['Saturday', 'Sunday']:
+        weekday = 'Monday'
+    DAY_DICT[weekday].append(name)
+
+
 def get_birthdays_per_week(users):
     current_date = datetime.now()
     end_date = current_date + timedelta(days=7)
+
     for name, date in users.items():
         date = date.replace(year=current_date.year)
-        if date > current_date and date <= end_date:
-            if date.weekday() == 0 or date.weekday() == 5 or date.weekday() == 6:
-                DAY_DICT['Monday'].append(name)
-            elif date.weekday() == 1:
-                DAY_DICT['Tuesday'].append(name)
-            elif date.weekday() == 2:
-                DAY_DICT['Wednesday'].append(name)
-            elif date.weekday() == 3:
-                DAY_DICT['Thursday'].append(name)
-            elif date.weekday() == 4:
-                DAY_DICT['Friday'].append(name)
+        if current_date < date <= end_date:
+            weekday_checker(name, date)
 
     for day, names in DAY_DICT.items():
-        names_list = ""
-        for name in names:
-            names_list += f'{name}, '
+        names_string = ', '.join(names)
         if DAY_DICT[day]:
-            print(f'{day}: {names_list[0:-2]}')
+            print(f'{day}: {names_string}')
 
 
 # Створено для тестування роботи програми:
